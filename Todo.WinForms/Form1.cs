@@ -4,7 +4,7 @@ namespace Todos.WinForms
 {
     public partial class MainForm : Form
     {
-        TodoManager todoManager = new TodoManager();
+        readonly TodoManager todoManager = new();
 
         public MainForm()
         {
@@ -13,15 +13,15 @@ namespace Todos.WinForms
 
             foreach (var todo in todos)
             {
-                TodosClb.Items.Add(todo.Title, todo.IsDone);
+                ImptUrgtCLB.Items.Add(todo.Title, todo.IsDone);
             }
         }
 
-        private void TodosClb_ItemCheck(object sender, ItemCheckEventArgs e)
+        private void ImportantAndUrgentCLB_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-            if (TodosClb.SelectedItem != null)
+            if (ImptUrgtCLB.SelectedItem != null)
             {
-                todoManager.DoneTodo(TodosClb.SelectedItem.ToString());
+                todoManager.DoneTodo(title: ImptUrgtCLB.SelectedItem.ToString());
             }
         }
 
@@ -30,11 +30,16 @@ namespace Todos.WinForms
             todoManager.Save();
         }
 
-        private void CreateBtn_Click(object sender, EventArgs e)
+        private void CreateImptTdBtn_Click(object sender, EventArgs e)
         {
-            todoManager.AddTodo(todoTb.Text);
-            TodosClb.Items.Add(todoTb.Text);
-            todoTb.Text = String.Empty;
+            todoManager.AddTodo(ImportantTB.Text);
+            ImptUrgtCLB.Items.Add(ImportantTB.Text);
+            ImportantTB.Text = string.Empty;
+        }
+
+        private void NotImportantTP_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
