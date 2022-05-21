@@ -7,7 +7,7 @@ namespace Todos.Infrastructure
     {
         private readonly List<Todo> todoList;
 
-        private string path = $"{Directory.GetCurrentDirectory()}\\todos.json";
+        private readonly string path = $"{Directory.GetCurrentDirectory()}\\todos.json";
 
         public TodoManager()
         {
@@ -33,13 +33,35 @@ namespace Todos.Infrastructure
 
         public List<Todo> GetTodoList() => todoList;
 
-        public void AddTodo(string title)
+        public Todo GetTodo(string title) => todoList.First(todo => todo.Title == title);
+
+        public bool Contains(string title)
         {
-            todoList.Add(new Todo()
+            return todoList.FirstOrDefault(todo => todo.Title == title) != null;
+        }
+
+        public bool AddTodo(string title)
+        {
+            if (Contains(title) == false)
             {
-                Id = Guid.NewGuid().ToString(),
-                Title = title,
-            });
+                todoList.Add(new Todo()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Title = title,
+                });
+                return true;
+            }
+            return false;
+        }
+
+        public bool ChangeTodo(string oldTitle, string newTitle)
+        {
+            if (Contains(oldTitle))
+            {
+                GetTodo(oldTitle).Title = newTitle;
+                return true;
+            }
+            return false;
         }
 
         public void AddTodoToParent(string parentTitle, string title)
@@ -50,6 +72,16 @@ namespace Todos.Infrastructure
                 Title = title
             };
             todoList.First(todo => todo.Title == parentTitle).Children.Add(todo);
+        }
+
+        public bool Remove(string title)
+        {
+            if (todoList.Contains(GetTodo(title)))
+            {
+                todoList.Remove(GetTodo(title));
+                return true;
+            }
+            return false;
         }
 
         public void DoneTodo(string title)

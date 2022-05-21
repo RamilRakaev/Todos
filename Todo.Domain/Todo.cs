@@ -8,6 +8,12 @@
 
         public bool IsDone { get; set; }
 
+        public TypeTodo Type { get; set; }
+
+        public DateTime TimeToComplete { get; set; }
+
+        public Complexity Complexity { get; set; }
+
         public Todo? Parent { get; set; }
 
         public string ParentId { get; set; }
